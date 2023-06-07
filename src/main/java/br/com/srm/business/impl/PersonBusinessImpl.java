@@ -5,6 +5,8 @@ import br.com.srm.dto.PersonRequestDTO;
 import br.com.srm.dto.PersonResponseDTO;
 import br.com.srm.entity.Person;
 import br.com.srm.enums.DocumentTypeEnum;
+import br.com.srm.enums.ExceptionEnum;
+import br.com.srm.exception.BusinessException;
 import br.com.srm.repository.PersonRepository;
 import br.com.srm.utils.StringUtils;
 import org.modelmapper.ModelMapper;
@@ -42,6 +44,10 @@ public class PersonBusinessImpl implements PersonBusiness {
 
     @Override
     public PersonResponseDTO createPerson(PersonRequestDTO requestDTO) {
+        Optional<Person> optPerson = repository.findByDocument(StringUtils.removeMask(requestDTO.getDocument()));
+        if (optPerson.isPresent()) {
+            throw new BusinessException(ExceptionEnum.CPF_ALREADY_EXIST.getMessage());
+        }
         Person person = mapper.map(requestDTO, Person.class);
         person.setDocument(StringUtils.removeMask(requestDTO.getDocument()));
         person.setDocumentType(person.getDocument().length() > 11 ? "CNPJ" : "CPF");
