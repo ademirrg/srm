@@ -50,7 +50,7 @@ Ex.: de resposta:
 "documentType": "CPF"
 }
 
-URI /person/update (atualiza uma pessoa no banco de dados)
+URI /person/update/{id} (atualiza uma pessoa no banco de dados)
 Metodo PUT
 Ex.: de resposta:
 {
@@ -60,7 +60,7 @@ Ex.: de resposta:
 "documentType": "CPF"
 }
 
-URI /person/delete/{document} (deleta uma pessoa no banco de dados)
+URI /person/delete/{id} (deleta uma pessoa no banco de dados)
 Metodo POST
 Ex.: de resposta:
 {

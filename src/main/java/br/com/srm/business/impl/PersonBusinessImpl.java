@@ -10,12 +10,14 @@ import br.com.srm.utils.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
 public class PersonBusinessImpl implements PersonBusiness {
     
     @Autowired @Lazy
@@ -48,9 +50,9 @@ public class PersonBusinessImpl implements PersonBusiness {
     }
 
     @Override
-    public PersonResponseDTO updatePerson(PersonRequestDTO requestDTO) {
-        if (repository.findByDocument(StringUtils.removeMask(requestDTO.getDocument())).isPresent()) {
-            Person person = mapper.map(requestDTO, Person.class);
+    public PersonResponseDTO updatePerson(PersonRequestDTO requestDTO, Long id) {
+        if (repository.existsById(id)) {
+            Person person = repository.findById(id).get();
             person.setDocument(StringUtils.removeMask(requestDTO.getDocument()));
             person.setDocumentType(person.getDocument().length() > 11 ? DocumentTypeEnum.CNPJ.getDescription() : DocumentTypeEnum.CPF.getDescription());
             person.setModifyDate(LocalDateTime.now());
@@ -60,7 +62,7 @@ public class PersonBusinessImpl implements PersonBusiness {
     }
 
     @Override
-    public void deletePerson(String document) {
-        repository.findByDocument(StringUtils.removeMask(document)).ifPresent(person -> repository.deleteById(person.getId()));
+    public void deletePerson(Long id) {
+        repository.findById(id).ifPresent(person -> repository.deleteById(person.getId()));
     }
 }

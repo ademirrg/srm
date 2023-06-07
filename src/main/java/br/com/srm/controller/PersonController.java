@@ -37,14 +37,14 @@ public class PersonController {
         return ResponseEntity.ok(business.createPerson(requestDTO));
     }
 
-    @PutMapping("/update")
-    private ResponseEntity<PersonResponseDTO> updatePerson(@Valid @RequestBody PersonRequestDTO requestDTO) {
-        return ResponseEntity.ok(business.updatePerson(requestDTO));
+    @PutMapping("/update/{id}")
+    private ResponseEntity<PersonResponseDTO> updatePerson(@Valid @RequestBody PersonRequestDTO requestDTO, @PathVariable Long id) {
+        return ResponseEntity.ok(business.updatePerson(requestDTO, id));
     }
 
-    @PostMapping("/delete/{document}")
-    private ResponseEntity<String> deletePerson(@PathVariable String document) {
-        business.deletePerson(document);
+    @PostMapping("/delete/{id}")
+    private ResponseEntity<String> deletePerson(@PathVariable Long id) {
+        business.deletePerson(id);
         return ResponseEntity.ok("Registro Deletado");
     }
 
